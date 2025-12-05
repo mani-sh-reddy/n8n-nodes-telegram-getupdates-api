@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.0.0...v1.1.0) (2025-12-05)
+
+
+### Features
+
+* release to npm ([6102e54](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/6102e54135d2998e93d01b9b3974a1f92863f121))
+
 # 1.0.0 (2025-12-05)
 
 
