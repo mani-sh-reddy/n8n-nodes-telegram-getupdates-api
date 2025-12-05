@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.1.0...v1.2.0) (2025-12-05)
+
+
+### Features
+
+* update action to run build ([16afea5](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/16afea57157665dccd6bfadc93da1b17169f6950))
+
 # [1.1.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.0.0...v1.1.0) (2025-12-05)
 
 
