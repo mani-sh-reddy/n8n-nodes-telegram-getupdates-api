@@ -1,5 +1,5 @@
 import type {
-	IAuthenticateGeneric,
+	// IAuthenticateGeneric,
 	Icon,
 	ICredentialTestRequest,
 	ICredentialType,

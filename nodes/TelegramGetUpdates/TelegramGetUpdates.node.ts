@@ -7,8 +7,19 @@ import {
 	type INodeTypeDescription,
 	type ITriggerFunctions,
 	type ITriggerResponse,
-	type IDataObject
+	type IDataObject,
 } from 'n8n-workflow';
+
+type ApiResponse<T> = {
+	ok: boolean;
+	result: T;
+};
+
+// Minimal Update type; extend with the fields you actually use
+type Update = {
+	update_id: number;
+	[key: string]: unknown;
+};
 
 export class TelegramGetUpdates implements INodeType {
 	description: INodeTypeDescription = {
@@ -38,8 +49,8 @@ export class TelegramGetUpdates implements INodeType {
 
 		credentials: [
 			{
-				name: "botTokenTelegramApi",
-				required: true
+				name: 'botTokenTelegramApi',
+				required: true,
 			},
 		],
 
@@ -55,21 +66,22 @@ export class TelegramGetUpdates implements INodeType {
 		let allowedUpdates = this.getNodeParameter('allowed_updates') as string[];
 
 		if (allowedUpdates.includes('all_updates')) {
-			allowedUpdates = [] as string[];
+			allowedUpdates = [];
 		}
 
 		let isPolling = true;
-		let currentRequest: Promise<any> | null = null;
+
+		// Note: promise is now typed once here
+		let currentRequest: Promise<ApiResponse<Update[]>> | null = null;
 
 		const startPolling = async () => {
 			let offset = 0;
 
 			while (isPolling) {
 				try {
-					// Store the current request so we can wait for it during cleanup
-					currentRequest = this.helpers.request({
+					currentRequest = this.helpers.httpRequest({
 						method: 'POST',
-						uri: `https://api.telegram.org/bot${credentials.accessToken}/getUpdates`,
+						url: `https://api.telegram.org/bot${credentials.accessToken}/getUpdates`,
 						body: {
 							offset,
 							limit,
@@ -77,13 +89,12 @@ export class TelegramGetUpdates implements INodeType {
 							allowed_updates: allowedUpdates,
 						},
 						json: true,
-						timeout: (timeout + 5) * 1000, // Add buffer to HTTP timeout (in ms)
-					});
+						timeout: (timeout + 5) * 1000,
+					}) as Promise<ApiResponse<Update[]>>;
 
-					const response = (await currentRequest) as ApiResponse<Update[]>;
+					const response = await currentRequest;
 					currentRequest = null;
 
-					// Exit loop if polling was stopped during the request
 					if (!isPolling) {
 						break;
 					}
@@ -93,6 +104,7 @@ export class TelegramGetUpdates implements INodeType {
 					}
 
 					let updates = response.result;
+
 					if (updates.length > 0) {
 						offset = updates[updates.length - 1].update_id + 1;
 
@@ -102,38 +114,37 @@ export class TelegramGetUpdates implements INodeType {
 							);
 						}
 
-						this.emit([updates.map((update) => ({ json: update as unknown as IDataObject }))]);
+						this.emit([
+							updates.map((update) => ({
+								json: update as unknown as IDataObject,
+							})),
+						]);
 					}
-				} catch (error) {
-					// Exit loop if polling was stopped
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				} catch (error: any) {
 					if (!isPolling) {
 						break;
 					}
 
-					// Handle 409 conflicts during workflow saves/reactivations
 					if (error.response?.status === 409) {
-						console.debug('Telegram API returned 409, likely due to multiple polling instances');
 						continue;
 					}
 
-					// Re-throw other errors
 					throw error;
 				}
 			}
 		};
 
-		// Start polling without awaiting (runs in background)
-		startPolling();
+		// Fire and forget
+		void startPolling();
 
 		const closeFunction = async () => {
 			isPolling = false;
 
-			// Wait for the current request to complete (if any)
-			// This prevents the "request cancelled" error and allows graceful shutdown
 			if (currentRequest) {
 				try {
 					await currentRequest;
-				} catch (error) {
+				} catch {
 					// Ignore errors during cleanup
 				}
 			}
