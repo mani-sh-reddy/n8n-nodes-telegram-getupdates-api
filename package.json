@@ -20,13 +20,13 @@
 		"url": "https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api.git"
 	},
 	"scripts": {
-		"build": "npx @n8n/node-cli build",
+		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
-		"dev": "npx @n8n/node-cli dev",
-		"lint": "npx @n8n/node-cli lint",
-		"lint:fix": "npx @n8n/node-cli lint --fix",
-		"release": "npx @n8n/node-cli release",
-		"prepublishOnly": "npx @n8n/node-cli prerelease"
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
 	},
 	"files": [
 		"dist"
