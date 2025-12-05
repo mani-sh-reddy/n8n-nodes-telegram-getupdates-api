@@ -2,6 +2,7 @@
 
 This is an n8n community node. Use this to receive incoming Telegram updates (messages, reactions, posts, etc) using long polling.
 
+
 Long polling is a pull-based method for receiving updates where the bot repeatedly calls the Telegram Bot API's getUpdates method to retrieve new updates. This an alternative method where Telegram pushes updates to the bot's server via webhook.
 
 The existing n8n Telegram Trigger node uses webhooks, which require:
