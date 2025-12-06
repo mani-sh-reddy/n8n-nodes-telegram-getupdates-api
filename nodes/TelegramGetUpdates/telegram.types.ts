@@ -651,7 +651,7 @@ export interface ForumTopicCreated {
   icon_custom_emoji_id?: string;
 }
 
-export interface ForumTopicClosed {}
+export type ForumTopicClosed = unknown
 
 /** This object represents a service message about an edited forum topic. */
 export interface ForumTopicEdited {
@@ -659,9 +659,9 @@ export interface ForumTopicEdited {
   icon_custom_emoji_id?: string;
 }
 
-export interface ForumTopicReopened {}
-export interface GeneralForumTopicHidden {}
-export interface GeneralForumTopicUnhidden {}
+export type ForumTopicReopened = unknown
+export type GeneralForumTopicHidden = unknown
+export type GeneralForumTopicUnhidden = unknown
 
 /** This object contains information about a user that was shared with the bot. */
 export interface SharedUser {
@@ -699,7 +699,7 @@ export interface VideoChatScheduled {
   start_date: number;
 }
 
-export interface VideoChatStarted {}
+export type VideoChatStarted = unknown
 
 /** This object represents a service message about a video chat ended in the chat. */
 export interface VideoChatEnded {
@@ -1900,8 +1900,8 @@ export interface PassportData {
   credentials: PassportElementCredentials;
 }
 
-export interface PassportElementData {}
-export interface PassportElementCredentials {}
+export type PassportElementData = unknown
+export type PassportElementCredentials = unknown
 
 /** This object describes the source or recipient of a transaction. */
 export type TransactionPartner = TransactionPartnerUser | TransactionPartnerChat | 
