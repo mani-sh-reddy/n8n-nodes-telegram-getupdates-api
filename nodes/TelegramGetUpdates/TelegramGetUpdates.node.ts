@@ -1,6 +1,8 @@
 import { limitProperty } from './limitProperty';
 import { timeoutProperty } from './timeoutProperty';
 import { allowedUpdatesProperty } from './allowedUpdatesProperty';
+import { TelegramApiResponse, Update } from './telegram.types';
+
 import {
 	NodeConnectionTypes,
 	type INodeType,
@@ -9,17 +11,6 @@ import {
 	type ITriggerResponse,
 	type IDataObject,
 } from 'n8n-workflow';
-
-type ApiResponse<T> = {
-	ok: boolean;
-	result: T;
-};
-
-// Minimal Update type; extend with the fields you actually use
-type Update = {
-	update_id: number;
-	[key: string]: unknown;
-};
 
 export class TelegramGetUpdates implements INodeType {
 	description: INodeTypeDescription = {
@@ -72,7 +63,7 @@ export class TelegramGetUpdates implements INodeType {
 		let isPolling = true;
 
 		// Note: promise is now typed once here
-		let currentRequest: Promise<ApiResponse<Update[]>> | null = null;
+		let currentRequest: Promise<TelegramApiResponse<Update[]>> | null = null;
 
 		const startPolling = async () => {
 			let offset = 0;
@@ -90,7 +81,7 @@ export class TelegramGetUpdates implements INodeType {
 						},
 						json: true,
 						timeout: (timeout + 5) * 1000,
-					}) as Promise<ApiResponse<Update[]>>;
+					}) as Promise<TelegramApiResponse<Update[]>>;
 
 					const response = await currentRequest;
 					currentRequest = null;
@@ -109,13 +100,13 @@ export class TelegramGetUpdates implements INodeType {
 						offset = updates[updates.length - 1].update_id + 1;
 
 						if (allowedUpdates.length > 0) {
-							updates = updates.filter((update) =>
+							updates = updates.filter((update: Update) =>
 								Object.keys(update).some((x) => allowedUpdates.includes(x)),
 							);
 						}
 
 						this.emit([
-							updates.map((update) => ({
+							updates.map((update: Update) => ({
 								json: update as unknown as IDataObject,
 							})),
 						]);
