@@ -22,12 +22,12 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "24"
-
-      - name: Lint
-        run: npm run lint
-
+          
       - name: Clean Install
         run: npm ci
+      
+      - name: Lint
+        run: npm run lint
 
       - name: Build
         if: github.ref == 'refs/heads/main'
