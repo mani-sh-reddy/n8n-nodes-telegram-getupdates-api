@@ -1,7 +1,10 @@
 import { limitProperty } from './limitProperty';
 import { timeoutProperty } from './timeoutProperty';
 import { allowedUpdatesProperty } from './allowedUpdatesProperty';
+import { usernameProperty } from './usernameProperty';
+import { extractUsernameFromUpdate } from './extractUsernameHelper';
 import { TelegramApiResponse, Update } from './telegram.types';
+
 
 import {
 	NodeConnectionTypes,
@@ -11,6 +14,7 @@ import {
 	type ITriggerResponse,
 	type IDataObject,
 } from 'n8n-workflow';
+
 
 export class TelegramGetUpdates implements INodeType {
 	description: INodeTypeDescription = {
@@ -45,15 +49,19 @@ export class TelegramGetUpdates implements INodeType {
 			},
 		],
 
-		properties: [limitProperty, timeoutProperty, allowedUpdatesProperty],
+		properties: [
+			limitProperty,
+			timeoutProperty,
+			usernameProperty,
+			allowedUpdatesProperty,
+		],
 	};
 
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
 		const credentials = await this.getCredentials('botTokenTelegramApi');
-
 		const limit = this.getNodeParameter('limit') as number;
 		const timeout = this.getNodeParameter('timeout') as number;
-
+		const filterUsername = (this.getNodeParameter('filter_username') as string)?.trim().replace(/@/g, '') || '';
 		let allowedUpdates = this.getNodeParameter('allowed_updates') as string[];
 
 		if (allowedUpdates.includes('all_updates')) {
@@ -62,7 +70,6 @@ export class TelegramGetUpdates implements INodeType {
 
 		let isPolling = true;
 
-		// Note: promise is now typed once here
 		let currentRequest: Promise<TelegramApiResponse<Update[]>> | null = null;
 
 		const startPolling = async () => {
@@ -105,22 +112,29 @@ export class TelegramGetUpdates implements INodeType {
 							);
 						}
 
-						this.emit([
-							updates.map((update: Update) => ({
-								json: update as unknown as IDataObject,
-							})),
-						]);
+						if (filterUsername) {
+							updates = updates.filter((update: Update) => {
+								const username = extractUsernameFromUpdate(update);
+								return username !== null && username === filterUsername;
+							});
+						}
+
+						if (updates.length > 0) {
+							this.emit([
+								updates.map((update: Update) => ({
+									json: update as unknown as IDataObject,
+								})),
+							]);
+						}
 					}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				} catch (error: any) {
 					if (!isPolling) {
 						break;
 					}
-
 					if (error.response?.status === 409) {
 						continue;
 					}
-
 					throw error;
 				}
 			}
