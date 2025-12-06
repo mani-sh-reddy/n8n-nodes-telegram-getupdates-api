@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.2.0...v1.3.0) (2025-12-06)
+
+
+### Bug Fixes
+
+* empty interface declaration ([5e37a19](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/5e37a196b9b11e8ef096591dd61f6622e491c89c))
+
+
+### Features
+
+* add username filter ([f3ccd51](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/f3ccd5165554a67d1e52985db8753f63ef55f3b9))
+* added telegram response types ([9795566](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/979556687445b5ffe8ac6b6fca546e2b02b823e7))
+
 # [1.2.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.1.0...v1.2.0) (2025-12-05)
 
 
