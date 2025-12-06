@@ -1,6 +1,9 @@
 {
 	"name": "n8n-nodes-telegram-getupdates-api",
 	"version": "1.3.0",
+	"publishConfig": {
+		"provenance": true
+	},
 	"description": "Receive incoming Telegram updates using long polling.",
 	"license": "MIT",
 	"homepage": "https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api",
