@@ -8,6 +8,7 @@ import { TelegramApiResponse, Update } from './telegram.types';
 
 import {
 	NodeConnectionTypes,
+	NodeApiError,
 	type INodeType,
 	type INodeTypeDescription,
 	type ITriggerFunctions,
@@ -121,8 +122,9 @@ export class TelegramGetUpdates implements INodeType {
 
 						if (updates.length > 0) {
 							this.emit([
-								updates.map((update: Update) => ({
+								updates.map((update: Update, index: number) => ({
 									json: update as unknown as IDataObject,
+									pairedItem: { item: index },
 								})),
 							]);
 						}
@@ -135,7 +137,14 @@ export class TelegramGetUpdates implements INodeType {
 					if (error.response?.status === 409) {
 						continue;
 					}
-					throw error;
+					throw new NodeApiError(
+						error.message || 'Telegram API request failed',
+						{
+							context: { method: 'getUpdates', url: error.config?.url },
+							code: error.code,
+							httpCode: error.response?.status,
+						},
+					);
 				}
 			}
 		};
