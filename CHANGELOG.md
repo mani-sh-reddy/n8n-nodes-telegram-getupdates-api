@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.4.0...v1.4.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* TelegramGetUpdates medium priority issues ([8611c90](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/commit/8611c90cb244bc723a4eec87a6b1667a72f0eecb))
+
 # [1.4.0](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/compare/v1.3.0...v1.4.0) (2025-12-06)
 
 
