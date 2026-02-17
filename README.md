@@ -2,7 +2,7 @@
 ![npm version](https://img.shields.io/npm/v/n8n-nodes-telegram-getupdates-api)
 ![npm downloads](https://img.shields.io/npm/dt/n8n-nodes-telegram-getupdates-api)
 ![license](https://img.shields.io/npm/l/n8n-nodes-telegram-getupdates-api)
-![Build Status](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/actions/workflows/Release.yml/badge.svg)
+![Build Status](https://github.com/mani-sh-reddy/n8n-nodes-telegram-getupdates-api/actions/workflows/build.yml/badge.svg)
 ![GitHub issues](https://img.shields.io/github/issues/mani-sh-reddy/n8n-nodes-telegram-getupdates-api)
 
 
